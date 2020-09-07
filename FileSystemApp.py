@@ -4,53 +4,62 @@
 import os
 import re
 
-def create(filename):
-    """Create the file if file already not exists
-       otherwise print file existed message.
+
+def is_found(filename):
+    """Returns true if file exists, otherwise returns false.
     """
     
-    if os.path.isfile(filename+".txt"):
-        print("File existed already!")
+    if os.path.isfile(f"{filename}.txt"):
+        return True
+    return False
+    
+def create(filename):
+    """If the file does not exist then create the file
+       otherwise display the message that file exists.
+    """
+    
+    if is_found(filename):
+        print("File exists already!")
         return
-    file = open(filename + ".txt","w")
+    file = open(f"{filename}.txt","w")
     file.close()
     print("File created successfully!")
     return
 
 def remove(filename):
-    """Remove the file if file exists otherwise
-       print file not existed message.
+    """If file exists then remove the file otherwise
+       display the message that file does not exists.
     """
     
-    if not os.path.isfile(filename+".txt"):
-        print("File not exist!")
+    if not is_found(filename):
+        print("File not exists!")
         return
-    os.remove(filename + ".txt")
+    os.remove(f"{filename}.txt")
     print("File removed successfully!")
     return
 
 def show_content(filename):
-    """Display the content of file if file exists.
+    """If file exists then display the content of file.
     """
     
-    if not os.path.isfile(filename+".txt"):
-        print("File not exist!")
+    if not is_found(filename):
+        print("File not exists!")
         return
-    file = open(filename + ".txt","r")
+    file = open(f"{filename}.txt","r")
     content = file.read()
     print(content)
     file.close()
     return
 
 def update_append(filename):
-    """Update the content of file by appending, if file not exist then, it
-    will first create the file and then append data in it.
+    """Update the content of file by appending the data. If the file does not exists then, it
+    will first create the file and then append the data in it.
     """
     
     print("Enter text that you want to append:")
-    txt = input()
-    file=open(filename + ".txt", "a+")
-    file.write(txt)
+    text = input()
+    file = open(f"{filename}.txt", "a+")
+    file.write(text)
     file.close()
     print("File updated successfully!")
     return
@@ -59,60 +68,55 @@ def update_overwrite(filename):
     """Update the content of file by overwriting.
     """
     
-    if not os.path.isfile(filename+".txt"):
-        print("File not exist!")
+    if not is_found(filename):
+        print("File not exists!")
         return
     print("Enter text:")
-    txt = input()
-    with open(filename + ".txt", "r+") as readWriteObj:
-        text = readWriteObj.read()
-        text = re.sub(text[0:len(txt)], txt, text)
-        readWriteObj.seek(0)
-        readWriteObj.write(text)
-        readWriteObj.truncate()
-        readWriteObj.close()
+    text = input()
+    with open(f"{filename}.txt", "w") as write_obj:
+        write_obj.seek(0)
+        write_obj.write(text)
+        write_obj.truncate()
+        write_obj.close()
         print("File updated successfully!")
     return
 
-def search(filename,string):
-    """Search desired string in file and prints all line numbers and corresponding
+def search(filename, string):
+    """Search desired string in a file and prints all line numbers and corresponding
        line contents where string founds. If string not founds, then display the
        message.
     """
     
-    if not os.path.isfile(filename+".txt"):
-        print("File not exist!")
+    if not is_found(filename):
+        print("File not exists!")
         return
-    lineNo = 0
-    lines=[]
-    with open(filename + ".txt", "r") as readObj:
-        for line in readObj:
-            lineNo += 1
-            if string in line:
-                lines.append((lineNo, line.rstrip()))
-        readObj.close()
-    if len(lines) == 0:
-        print(string + " Not found!")
-        return
-    for each in lines:
-        print(string + " found in line number " + str(each[0]) + " and line contents are:\n" + each[1])
+    flag = 0
+    with open(f"{filename}.txt", "r") as read_obj:
+        for item in enumerate(read_obj):
+            if string in item[1]:
+                print(f"{string} found in line number {item[0]+1} and line contents are:\n{item[1].rstrip()}")
+                flag = 1
+        read_obj.close()
+    if flag == 0:
+        print(f"{string} Not found!")
     return
+   
 
-def replace_word(filename, word, newWord):
-    """Replace older word with new word in a file.
+def replace_word(filename, word, new_word):
+    """Replaces the older word with the new word in a file.
     """
     
-    if not os.path.isfile(filename+".txt"):
-        print("File not exist!")
+    if not is_found(filename):
+        print("File not exists!")
         return
-    with open(filename + ".txt", "r+") as readWriteObj:
-        text = readWriteObj.read()
+    with open(f"{filename}.txt", "r+") as read_write_obj:
+        text = read_write_obj.read()
         # replace the selected regular expression with new word
-        text = re.sub(word, newWord, text) 
-        readWriteObj.seek(0)
-        readWriteObj.write(text)
-        readWriteObj.truncate()
-        readWriteObj.close()
+        text = re.sub(word, new_word, text) 
+        read_write_obj.seek(0)
+        read_write_obj.write(text)
+        read_write_obj.truncate()
+        read_write_obj.close()
         print("Word replaced successfully!")
     return
 
@@ -134,7 +138,8 @@ def main():
     while True:
         display()
         option = input()
-        if option not in ('1','2','3','4','5','6','7','8'):
+        options = map(lambda x: str(x), list(range(1,9)))
+        if option not in options:
             print("Invalid option!")
             continue
         if option == '8':
@@ -154,13 +159,13 @@ def main():
         elif option == '6':
             print("Enter string for search:")
             string = input()
-            search(filename,string)
+            search(filename, string)
         elif option == '7':
-            print("Enter word to be replaced:")
+            print("Enter the word that you wants to be replaced:")
             word = input()
             print("Enter new word:")
-            newWord = input()
-            replace_word(filename, word, newWord)
+            new_word = input()
+            replace_word(filename, word, new_word)
     return
 
 if __name__ == "__main__":
