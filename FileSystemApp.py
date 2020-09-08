@@ -77,7 +77,6 @@ def update_overwrite(filename):
         write_obj.seek(0)
         write_obj.write(text)
         write_obj.truncate()
-        write_obj.close()
         print("File updated successfully!")
     return
 
@@ -96,7 +95,6 @@ def search(filename, string):
             if string in item[1]:
                 print(f"{string} found in line number {item[0]+1} and line contents are:\n{item[1].rstrip()}")
                 flag = 1
-        read_obj.close()
     if flag == 0:
         print(f"{string} Not found!")
     return
@@ -116,7 +114,6 @@ def replace_word(filename, word, new_word):
         read_write_obj.seek(0)
         read_write_obj.write(text)
         read_write_obj.truncate()
-        read_write_obj.close()
         print("Word replaced successfully!")
     return
 
