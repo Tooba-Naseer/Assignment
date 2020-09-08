@@ -88,13 +88,13 @@ def main():
         elif option == '2':
             print("Enter id of task you want to get:")
             Id = input()
-            if get_position(Id, tasks) != None:
+            if get_position(Id, tasks) is not None:
               item = get_position(Id, tasks)
               item[1].get()
         elif option == '3':
             print("Enter id of task you want to update:")
             Id = input()
-            if get_position(Id, tasks) != None:
+            if get_position(Id, tasks) is not None:
               item = get_position(Id, tasks)
               title, description = ask()
               item[1].update(title, description)
@@ -102,7 +102,7 @@ def main():
         elif option == '4':
             print("Enter id of task you want to delete:")
             Id = input()
-            if get_position(Id, tasks) != None:
+            if get_position(Id, tasks) is not None:
               item = get_position(Id, tasks)
               del tasks[item[0]]
               print(item[1])
