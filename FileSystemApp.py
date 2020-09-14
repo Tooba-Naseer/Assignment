@@ -123,7 +123,7 @@ def main():
     while True:
         display()
         option = input()
-        options = [str(i) for i in range(1,9)]
+        options = [str(i) for i in range(1, 9)]
 
         # check that option is valid or not
         if option not in options:
