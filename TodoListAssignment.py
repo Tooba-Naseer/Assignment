@@ -51,7 +51,7 @@ def get_position(Id, tasks):
         if Id == str(item.Id):
             return i
     print("Task id is not found!")
-    return None     
+    return
 
 
 def display():
